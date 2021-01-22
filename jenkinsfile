@@ -17,11 +17,11 @@ pipeline{
             steps{
                 sshagent(['tomy2']) {
                 sh """
-                    scp -o StrictHostKeyChecking=no target/*.jar  ubuntu@172.31.45.99:/opt/tomcat8/webapps/
+                    scp -o StrictHostKeyChecking=no target/*.jar  root@172.31.45.99:/opt/tomcat8/webapps/
                     
-                    ssh ubuntu@172.31.45.99 /opt/tomcat8/bin/shutdown.sh
+                    ssh root@172.31.45.99 /opt/tomcat8/bin/shutdown.sh
                     
-                    ssh ubuntu@172.31.45.99 /opt/tomcat8/bin/startup.sh
+                    ssh root@172.31.45.99 /opt/tomcat8/bin/startup.sh
                 
                 """
             }
