@@ -1,0 +1,32 @@
+pipeline{
+    agent any
+    
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: '3d6c8706-324a-402c-8316-65a37d7b7a5c', url: 'https://github.com/praneetha-b/pipe.git'
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                sh "mvn clean package"
+                
+            }
+        }
+        stage("deploy-dev"){
+            steps{
+                sshagent(['tomy']) {
+                sh """
+                    scp -o StrictHostKeyChecking=no target/*.war  root@172.31.45.99:/opt/tomcat8/webapps/
+                    
+                    ssh root@172.31.45.99 /opt/tomcat8/bin/shutdown.sh
+                    
+                    ssh root@172.31.45.99 /opt/tomcat8/bin/startup.sh
+                
+                """
+            }
+            
+            }
+        }
+    }
+}
